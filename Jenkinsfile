@@ -57,13 +57,15 @@ pipeline {
           string(credentialsId: 'azure-tenant-id', variable: '9e6530da-c1ae-4b6a-b8ae-811eb9bf481e')
         ]) {
             sh '''
-              az login --service-principal \
-                -u $AZURE_CLIENT_ID \
-                -p $AZURE_CLIENT_SECRET \
-                --tenant $AZURE_TENANT_ID
+              echo "Logging into Azure..."
 
-              az acr login -n acrregistry11
-            '''
+        az login --service-principal \
+          -u $AZURE_CLIENT_ID \
+          -p $AZURE_CLIENT_SECRET \
+          --tenant $AZURE_TENANT_ID
+
+        az account show
+      '''
         }
     }
 }
