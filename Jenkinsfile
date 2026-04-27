@@ -73,7 +73,14 @@ pipeline {
   }
 }
 
-
+stage('Login to ACR') {
+    steps {
+        sh '''
+            echo "Logging into ACR..."
+            az acr login --name acrregistry11
+        '''
+    }
+}
         stage('Push to ACR') {
             steps {
                 sh '''
