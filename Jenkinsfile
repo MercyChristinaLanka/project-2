@@ -49,25 +49,28 @@ pipeline {
             }
         }
 
-     stage('Azure Login & ACR') {
-    steps {
-        withCredentials([
-          string(credentialsId: 'azure-client-id', variable:'1b2b3322-7797-4554-8517-3c97d4adb49d'),
-          string(credentialsId: 'azure-client-secret', variable: 'j0n8Q~IXQsPDpTYtf7nZsjXjdJWPzqmURbuDNbrU'),
-          string(credentialsId: 'azure-tenant-id', variable: '9e6530da-c1ae-4b6a-b8ae-811eb9bf481e')
-        ]) {
-            sh '''
-              echo "Logging into Azure..."
+    stage('Azure Login & ACR') {
+  steps {
+    withCredentials([
+      string(credentialsId: 'azure-client-id', variable: 'AZURE_CLIENT_ID'),
+      string(credentialsId: 'azure-client-secret', variable: 'AZURE_CLIENT_SECRET'),
+      string(credentialsId: 'azure-tenant-id', variable: 'AZURE_TENANT_ID')
+    ]) {
+
+      sh """
+        echo "Logging into Azure..."
+
+        echo "DEBUG CLIENT ID = $AZURE_CLIENT_ID"
 
         az login --service-principal \
-          -u $AZURE_CLIENT_ID \
-          -p $AZURE_CLIENT_SECRET \
-          --tenant $AZURE_TENANT_ID
+          -u "$AZURE_CLIENT_ID" \
+          -p "$AZURE_CLIENT_SECRET" \
+          --tenant "$AZURE_TENANT_ID"
 
         az account show
-      '''
-        }
+      """
     }
+  }
 }
 
 
