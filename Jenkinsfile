@@ -49,14 +49,25 @@ pipeline {
             }
         }
 
-        stage('Azure Login & ACR') {
-            steps {
-                sh '''
-                az login --identity || true
-                az acr login --name acrregistry11
-                '''
-            }
+     stage('Azure Login & ACR') {
+    steps {
+        withCredentials([
+          string(credentialsId: 'azure-client-id', variable:'1b2b3322-7797-4554-8517-3c97d4adb49d'),
+          string(credentialsId: 'azure-client-secret', variable: 'j0n8Q~IXQsPDpTYtf7nZsjXjdJWPzqmURbuDNbrU'),
+          string(credentialsId: 'azure-tenant-id', variable: '9e6530da-c1ae-4b6a-b8ae-811eb9bf481e')
+        ]) {
+            sh '''
+              az login --service-principal \
+                -u $AZURE_CLIENT_ID \
+                -p $AZURE_CLIENT_SECRET \
+                --tenant $AZURE_TENANT_ID
+
+              az acr login -n acrregistry11
+            '''
         }
+    }
+}
+
 
         stage('Push to ACR') {
             steps {
